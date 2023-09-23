@@ -1,0 +1,15 @@
+{
+  "module": "NodeNext",
+  "compilerOptions": {
+    "target": "ES2018",
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "strict": true,
+  "esModuleInterop": true,
+  "skipLibCheck": true,
+  "forceConsistentCasingInFileNames": true,
+  "outDir": "./dist"
+}
