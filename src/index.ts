@@ -4,6 +4,9 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/userResolvers";
 import { connectToMongoDB } from "./services/mongodb";
+import { container } from "tsyringe";
+import { UserContext } from "./services/UserContext.service";
+import customAuthChecker from "./services/Authenticator";
 
 const startServer = async () => {
   const app = express();
@@ -11,9 +14,12 @@ const startServer = async () => {
   const schema = await buildSchema({
     resolvers: [UserResolver],
     emitSchemaFile: true,
+    authChecker: customAuthChecker,
   });
 
-  const server = new ApolloServer({ schema });
+  const context = container.resolve(UserContext).createContext;
+
+  const server = new ApolloServer({ schema, context });
 
   await connectToMongoDB();
   await server.start();
