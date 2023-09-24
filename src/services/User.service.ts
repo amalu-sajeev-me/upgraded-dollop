@@ -22,7 +22,7 @@ export class UserService {
       if (!user) {
         return false;
       }
-      const { password: pass, email } = user;
+      const { email } = user;
       const { default: jwt } = await import("jsonwebtoken");
       // console.log({ j: jwt });
       const token = jwt.sign({ username, email }, "your-secret-key", {
