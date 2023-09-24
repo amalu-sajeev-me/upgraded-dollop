@@ -3,10 +3,7 @@ import { IUser } from "../schema/User.schema";
 
 const customAuthChecker: AuthChecker<Record<"user", IUser>> = async ({
   context,
-  args,
 }) => {
-  // Get the token from the request headers
-  console.log({ ola: context, args }, "cooooo");
   const { user } = context;
 
   try {

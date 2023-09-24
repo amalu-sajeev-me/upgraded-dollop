@@ -1,9 +1,11 @@
-import { injectable } from "tsyringe";
+import { container, injectable } from "tsyringe";
 import { UserModel } from "../models/User.model";
 import { IUser } from "../schema/User.schema";
+import { InMemoryCacheService } from "./InMemoryCache.service";
 
 @injectable()
 export class UserService {
+  private readonly cacheService: InMemoryCacheService = container.resolve(InMemoryCacheService) as InMemoryCacheService;
   async addUser(user: IUser) {
     try {
       const newUser = new UserModel(user);
@@ -18,17 +20,17 @@ export class UserService {
 
   verifyCredentials = async (username: string, password: string) => {
     try {
+      const { default: jwt } = await import("jsonwebtoken");
+      const token = jwt.sign({ username }, "your-secret-key", {
+        expiresIn: "1h",
+      });
+      if (this.cacheService.has(username)) {
+        return token;
+      }
       const user = await UserModel.findOne({ username, password });
       if (!user) {
         return false;
       }
-      const { email } = user;
-      const { default: jwt } = await import("jsonwebtoken");
-      // console.log({ j: jwt });
-      const token = jwt.sign({ username, email }, "your-secret-key", {
-        expiresIn: "1h",
-      });
-      // console.log("userservice -- ", { token, password });
       return token;
     } catch (error) {
       console.error("Error verifying credentials:", error);

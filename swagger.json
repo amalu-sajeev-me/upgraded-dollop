@@ -1,0 +1,65 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Apollo GraphQL Server API",
+    "version": "1.0.0",
+    "description": "Documentation for the Apollo GraphQL server API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000"
+    }
+  ],
+  "paths": {
+    "/graphql": {
+      "post": {
+        "summary": "Execute a GraphQL query",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GraphQLRequest": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "variables": {
+            "type": "object"
+          }
+        },
+        "required": ["query"],
+        "additionalProperties": false
+      },
+      "GraphQLResponse": {
+        "type": "object",
+        "properties": {
+          "data": {},
+          "errors": {}
+        }
+      }
+    }
+  }
+}

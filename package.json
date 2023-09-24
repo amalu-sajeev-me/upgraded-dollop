@@ -1,12 +1,15 @@
 {
   "name": "upgraded-dollop",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "",
   "main": "index.js",
   "scripts": {
-  "test": "jest",
-  "lint": "eslint .",
-  "lint:fix": "eslint . --fix"
+    "test": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "generate-swagger": "npx swagger-jsdoc -d swaggerConfig.cjs -o swagger.json"
+
   },
   "keywords": [],
   "author": "",
@@ -24,6 +27,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.2",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^4.7.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.1",
     "tsyringe": "^4.8.0",
     "type-graphql": "^1.1.1",
