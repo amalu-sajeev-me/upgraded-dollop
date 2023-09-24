@@ -1,9 +1,7 @@
 import { Resolver, Query, Mutation, Arg, Authorized } from "type-graphql";
-import { User } from "../entities/User";
 import { UserService } from "../services/User.service";
 import { injectable, container } from "tsyringe";
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IUser {}
+import { User } from "../models/User.model";
 
 @injectable()
 @Resolver()
@@ -16,8 +14,8 @@ export class UserResolver {
    * @return {string} - The greeting message
    */
   @Authorized()
-  users(): unknown[] {
-    return [];
+  async users(): Promise<User[]> {
+    return (await this.userService.fetchAllUsers()) as User[];
   }
 
   @Mutation(() => User)
@@ -25,13 +23,12 @@ export class UserResolver {
     @Arg("username") username: string,
     @Arg("email") email: string,
     @Arg("password") password: string
-  ): Promise<IUser> {
-    // console.log("lol", { username, email });
+  ): Promise<User> {
     const newUser = await this.userService.addUser({
       username,
       password,
       email,
-    } satisfies IUser);
+    } as User);
     return newUser;
   }
 
@@ -40,9 +37,7 @@ export class UserResolver {
     @Arg("username") username: string,
     @Arg("password") password: string
   ): Promise<undefined | string> {
-    // Assuming you have a method to validate the user's credentials
     const token = await this.userService.verifyCredentials(username, password);
-    // console.log("lll", { token });
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (token) {
       return token;

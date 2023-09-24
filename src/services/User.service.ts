@@ -5,7 +5,9 @@ import { InMemoryCacheService } from "./InMemoryCache.service";
 
 @injectable()
 export class UserService {
-  private readonly cacheService: InMemoryCacheService = container.resolve(InMemoryCacheService) as InMemoryCacheService;
+  private readonly cacheService: InMemoryCacheService = container.resolve(
+    InMemoryCacheService
+  ) as InMemoryCacheService;
   async addUser(user: IUser) {
     try {
       const newUser = new UserModel(user);
@@ -36,5 +38,8 @@ export class UserService {
       console.error("Error verifying credentials:", error);
       throw error;
     }
+  };
+  fetchAllUsers = async () => {
+    return await UserModel.find({});
   };
 }

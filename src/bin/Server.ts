@@ -1,24 +1,24 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
-import { container, injectable } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "../resolvers/userResolvers";
 import customAuthChecker from "../services/Authenticator";
 import { UserContext } from "../services/UserContext.service";
-import {
-  EnvironmentUtil,
-  environmentContainer,
-} from "../utils/environment.util";
+import { EnvironmentUtil } from "../utils/environment.util";
+import { LoggerUtil } from "../utils/logger.util";
 
 @injectable()
 export class Server {
   public readonly app: express.Application = express();
-  private readonly envUtility: EnvironmentUtil = environmentContainer.resolve(
-    EnvironmentUtil
-  ) as typeof EnvironmentUtil;
+  //   private readonly envUtility: EnvironmentUtil = environmentContainer.resolve(
+  //     EnvironmentUtil
+  //   ) as typeof EnvironmentUtil;
   private server?: ApolloServer;
   private readonly userContextService: UserContext =
     container.resolve(UserContext);
+  constructor(@inject(LoggerUtil) private logger: typeof LoggerUtil) {}
+
   start = async () => {
     const { PORT = 4000 } = process.env;
     const schema = await buildSchema({
@@ -31,11 +31,12 @@ export class Server {
     this.server = server;
     await server.start();
     server.applyMiddleware({ app: this.app });
-    this.app.listen({ port: EnvironmentUtil.isLocal() ? PORT : 4000 }, () =>
-      console.log(
-        `Server running at http://localhost:4000${server.graphqlPath}`
-      )
-    );
+    this.app.listen({ port: EnvironmentUtil.isLocal() ? PORT : 4000 }, () => {
+      this.logger.info(
+        "info",
+        `server started running at http://localhost:4000/${server.graphqlPath}`
+      );
+    });
     return this;
   };
 
