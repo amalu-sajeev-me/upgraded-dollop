@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.2",
     "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.8.0",
     "type-graphql": "^1.1.1",
     "typescript": "^5.2.2",
     "zod": "^3.22.2"

@@ -1,3 +1,4 @@
+import { Document } from "mongoose";
 import { z } from "zod";
 
 const UserSchema = z.object({
@@ -5,7 +6,6 @@ const UserSchema = z.object({
   email: z.string().email(), // Ensure email format
   password: z.string(), // You might want to add additional validation rules for password
 });
-
-export type IUser = z.infer<typeof UserSchema>;
+export type IUser = z.infer<typeof UserSchema> & Partial<Document>;
 
 export { UserSchema };

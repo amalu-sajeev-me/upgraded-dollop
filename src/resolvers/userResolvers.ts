@@ -1,24 +1,32 @@
 import { Resolver, Query, Mutation, Arg, Authorized, Ctx } from "type-graphql";
 import { User } from "../entities/User";
 import { sign } from "jsonwebtoken";
-
+import { UserService } from "../services/User.service";
+import { injectable, container } from "tsyringe";
 interface IUser {}
 
+@injectable()
 @Resolver()
 export class UserResolver {
-  private userList: IUser[] = []; // Assuming User entity is defined
+  private userService: UserService = container.resolve(UserService);
 
   @Query(() => [User])
   users() {
-    return this.userList;
+    return [];
   }
 
   @Mutation(() => User)
-  addUser(@Arg("username") username: string, @Arg("email") email: string) {
+  async addUser(
+    @Arg("username") username: string,
+    @Arg("email") email: string
+  ) {
     console.log("lol", { username, email });
-    const user = { id: String(this.userList.length + 1), username, email };
-    this.userList.push(user);
-    return user;
+    const newUser = await this.userService.addUser({
+      username,
+      password: "password",
+      email,
+    } as IUser);
+    return newUser;
   }
 
   @Mutation(() => String)
