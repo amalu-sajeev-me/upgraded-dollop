@@ -1,14 +1,14 @@
 import "reflect-metadata";
 import { connectToMongoDB } from "./services/mongodb";
 import { container } from "tsyringe";
-import { Server } from "./bin/Server";
+import { ServerInit } from "./bin/Server";
 import { LoggerUtil } from "./utils/logger.util";
 
-container.registerSingleton(Server);
+container.registerSingleton(ServerInit);
 container.register<LoggerUtil>(LoggerUtil, { useValue: LoggerUtil });
 
 (async function main() {
-  const server = container.resolve(Server);
+  const server = container.resolve(ServerInit);
   await connectToMongoDB();
   (await server.start()).handleErrors();
 })();
