@@ -10,15 +10,20 @@ import { UserContext } from "../services/UserContext.service";
 import { EnvironmentUtil } from "../utils/environment.util";
 import { LoggerUtil } from "../utils/logger.util";
 import { Server } from "http";
+import { MongoDB } from "../services/mongodb.service";
 
 @injectable()
 export class ServerInit {
   public readonly app: express.Application = express();
+  // private readonly mongo: MongoDB = container.resolve(MongoDB);
   public io: SocketServer;
   private server?: ApolloServer;
   private readonly userContextService: UserContext =
     container.resolve(UserContext);
-  constructor(@inject(LoggerUtil) private logger: typeof LoggerUtil) {}
+  constructor(
+    @inject(LoggerUtil) private logger: typeof LoggerUtil,
+    @inject(MongoDB) private mongo: typeof MongoDB
+  ) {}
 
   start = async () => {
     const { PORT = 4000 } = process.env;
@@ -28,12 +33,11 @@ export class ServerInit {
       authChecker: customAuthChecker,
     });
     const context = this.userContextService.createContext;
-    this.app.use("/graphql", this.limitReqs);
     const server = new ApolloServer({ schema, context });
     this.server = server;
     await this.server.start();
     server.applyMiddleware({ app: this.app });
-    const expressServer = this.app.listen(
+    const httpServer = this.app.listen(
       { port: EnvironmentUtil.isLocal() ? PORT : 4000 },
       () => {
         this.logger.info(
@@ -42,8 +46,8 @@ export class ServerInit {
         );
       }
     );
-    this.createSocketServer(expressServer);
-    return { ...this, expressServer };
+    this.createSocketServer(httpServer);
+    return { ...this };
   };
 
   handleErrors = () => {

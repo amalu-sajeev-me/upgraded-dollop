@@ -37,7 +37,7 @@ export class UserResolver {
     @Arg("username") username: string,
     @Arg("password") password: string
   ): Promise<undefined | string> {
-    const token = await this.userService.verifyCredentials(username, password);
+    const token = await this.userService.verifyUser(username, password);
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (token) {
       return token;
