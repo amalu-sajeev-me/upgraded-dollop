@@ -2,7 +2,7 @@
   "name": "upgraded-dollop",
   "version": "1.0.0",
   "type": "commonjs",
-  "description": "Apollo GraphQl Server with MongoDB and Soclet.io -- fully leveraging TypeScript",
+  "description": "Apollo GraphQl Server with MongoDB and Socket.io -- fully leveraging TypeScript",
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles",
