@@ -18,6 +18,8 @@ export class UserService {
   async addUser(user: IUser) {
     try {
       await UserSchema.parseAsync(user);
+      const isUnique = !(await UserModel.exists({ username: user.username }));
+      if (!isUnique) throw new Error("username already exists");
       const newUser = new UserModel(user);
       await newUser.save();
       this.logger.info(

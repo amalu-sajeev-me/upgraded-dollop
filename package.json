@@ -2,16 +2,16 @@
   "name": "upgraded-dollop",
   "version": "1.0.0",
   "type": "commonjs",
-  "description": "",
+  "description": "Apollo GraphQl Server with MongoDB and Soclet.io -- fully leveraging TypeScript",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "generate-swagger": "npx swagger-jsdoc -d swaggerConfig.cjs -o swagger.json"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["assignment"],
+  "author": "Amalu Sajeev",
   "license": "ISC",
   "dependencies": {
     "@nestjs/testing": "^10.2.6",

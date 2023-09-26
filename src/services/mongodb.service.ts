@@ -1,23 +1,35 @@
-import { injectable } from "tsyringe";
+import { inject, injectable, singleton } from "tsyringe";
 import mongoose, { Connection } from "mongoose";
+import { LoggerUtil } from "../utils/logger.util";
 
+@singleton()
 @injectable()
 export class MongoDB {
   private connection: Connection;
+  // private readonly logger: LoggerUtil = container.resolve(
+  //   LoggerUtil
+  // ) as typeof LoggerUtil;
 
-  constructor() {
+  constructor(@inject(LoggerUtil) private readonly logger: typeof LoggerUtil) {
     this.connect();
-    this.setupEventListeners();
   }
 
-  private connect() {
-    const connectionString =
-      process.env.MONGODB_URI ||
-      "mongodb://admin:adminpassword@localhost:27017/?authSource=admin&readPreference=primary&ssl=false&directConnection=true";
+  private async connect() {
+    try {
+      const connectionString =
+        process.env.MONGODB_URI ||
+        "mongodb://admin:adminpassword@localhost:27017/?authSource=admin&readPreference=primary&ssl=false&directConnection=true";
 
-    mongoose.connect(connectionString, {});
+      await mongoose.connect(connectionString, {});
+      this.logger.info("MongoDB", "Database connection succesfull");
+      // this.logger.info
 
-    this.connection = mongoose.connection;
+      this.connection = mongoose.connection;
+
+      this.setupEventListeners();
+    } catch (error) {
+      console.error("MongoDB Connection Error:", error);
+    }
   }
 
   private setupEventListeners() {
