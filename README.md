@@ -13,3 +13,10 @@ Requirements:
 ORM (Sequelize or Mongoose).
 6. Utilize caching for frequently accessed resources to improve performance.
 7. Use TypeScript for your GraphQL schema and resolvers.
+
+
+steps to setup
+
+run ``npm run start`` to start the server;
+Compose up the docker-compose.yml file to set and start the MongoDB
+go to http://localhost:4000/graphql to explore the graphql schemas in the graphql playground
